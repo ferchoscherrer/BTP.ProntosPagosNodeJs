@@ -1,0 +1,17 @@
+{
+	"destinations": [
+		{
+			"name": "...",
+			"url": "...",
+			"forwardAuthToken": "..."
+		}
+	],
+    "VCAP_SERVICES": {
+		"xsuaa": [
+			{
+				"label": "xsuaa",
+				"...": "..."
+			}
+		]
+	}
+}

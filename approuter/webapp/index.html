@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COTEMAR | Prontos pagos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const res = await fetch("/user-api/currentUser")
+        const userData = await res.json()
+        document.getElementById("welcome-container").innerText = `¡ Bienvenido ${userData.firstname} !`
+    })
+</script>
+
+<body class="relative w-screen h-screen flex flex-col justify-center items-center overflow-x-hidden">
+    <main class="flex flex-col justify-center items-center gap-[2rem] z-[100] text-white">
+        <section id="welcome-container" class="text-5xl font-bold uppercase"></section>
+        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <a href="/doc/" class="block w-full h-full">Ver API docs</a>
+        </button>
+    </main>
+    <div class="absolute top-0 left-0 h-full w-full bg-slate-950 z-[-100]"><div class="absolute bottom-0 left-0 right-0 top-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div></div>
+</body>
+</html>

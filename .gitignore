@@ -1,0 +1,15 @@
+# ENVIRONMENT VARIABLES
+default-env.json
+
+# PACKAGE & MODULES 
+node_modules/
+package-lock.json
+
+# BUILD & DEPLOYMENT
+*.mtar
+mta_archives/
+dist/
+Makefile_*
+
+# IDE
+.vscode

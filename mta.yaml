@@ -1,0 +1,54 @@
+_schema-version: "3.2"
+ID: cotemar-prontospagos-service
+version: 0.0.1
+
+modules:
+  - name: cotemar-prontospagos-ts
+    type: nodejs
+    path: srv/dist
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+    parameters:
+      disk-quota: 250M
+      memory: 250M
+      buildpacks: [https://github.com/cloudfoundry/nodejs-buildpack]
+      keep-existing-routes: true
+      routes:
+        - route: prontospagosserviceprod.cfapps.us10.hana.ondemand.com
+    provides:
+      - name: srv_api
+        properties:
+          url: ${default-url}
+    requires:
+      - name: cotemar-prontospagos-xsuaa
+      - name: cotemar-prontospagos-logger
+      - name: cotemar-prontospagos-connectivity
+      - name: cotemar-prontospagos-destination
+
+# approuter deleted for QAs and PRD
+
+resources:
+  - name: cotemar-prontospagos-xsuaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./security/xs-security.json
+      service-plan: application
+      service: xsuaa
+  - name: cotemar-prontospagos-logger
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: lite
+      service: application-logs
+  - name: cotemar-prontospagos-destination
+    type: destination
+    parameters:
+      service-plan: lite
+      shared: true
+  - name: cotemar-prontospagos-connectivity
+    type: connectivity
+    parameters:
+      service-plan: lite
+      shared: true

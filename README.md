@@ -1,20 +1,38 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# COTEMAR - PRONTOS PAGOS
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+## Detalles
+Éste proyecto contiene dos aplicativos distintos: un **approuter** para exponer y disponibilizar documentación y el **backend** para crear el servidor.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Ambos aplicativos están protegidos con seguridad (XSUAA, OAuth 2), por lo tanto para acceder a ellos es necesario contar con ciertas credenciales.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+Además de la anterior, se bindea al **backend** con determinadas **instancias** de **BTP**
+- **application-logs**: para guardar logs históricos de la app.
+- **destination**: para consumir destinations definidas en BTP.
+- **connectivity**: para leer configuraciones asociadas a la autenticación y al servidor proxy que manejará las peticiones HTTP. 
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+## Arquitectura Hexagonal
+El **backend** sigue tal estructura para que el desarrollo sea prolijo y ordenado. Se detalla brevemente con el fin de facilitar la comprensión a los demás desarrolladores (o quien visite éste repositorio).
+
+Se divide el proyecto en **capas**. Las superiores dependen directamente de las inferiores. Idealmente, las partes no deberían comunicarse con elementos de capas superiores, sólo con las de su nivel o las que estén por debajo. Ésta arquitectura busca desacoplar el desarrollo de tecnologías, servicios y/o plataformas.
+
+- Capa de infraestuctura: entrada y salida de datos (controladores, rutas, validaciones).
+- Capa de aplicación: lógica de negocio, casos de uso específicos del aplicativo.
+- Capa de dominio: núcleo de la aplicación, desacoplado por puertos y adaptadores, forma el modelo de datos (entidades, servicios, repositorios).
+- Puertos (interfaces): definen el comportamiento (métodos) de los distintos repositorios.
+- Adaptadores (repositorios): implementación de un puerto, se adaptan al comportamiento del mismo.
+
+## Documentación
+La **API REST** desarrollada dentro del servidor está documentada con **Swagger**, definiendo endpoints, respuestas y schemas.
+Como el **backend** cuenta con seguridad, se ha creado el **approuter** mencionado previamente con el único fin de brindar acceso a la misma. Seguir [éste link](https://prontospagosapprouter.cfapps.us10.hana.ondemand.com/) para visualizarlo en detalle.
+
+## Requisitos
+- Configurar a nivel entorno las variables de usuario **DESTINATION_WORKFLOW**, **WORKFLOW_DEFINITION_ID** y **DESTINATION_310_ID** con sus valores correspondientes.
+
+## NOMENCLATURA PARA COMMITS
+Se utilizan palabras clave como prefijos para nombrar los commits de forma tal que represente lo más fiel posible los cambios.
+- feature/{...}: para nuevas funcionalidades o comportamiento.
+- update/{...}: para registrar una actualización de cierto código.
+- modify/{...}: ídem anterior.
+- refactor/{...}: para cambios relativos a mejoras y optimización de código.
+- bugfix/{...}: para resolver pequeños errores que no afectan de forma crítica el ciclo de vida del programa.
+- hotfix/{...}: para resolver pequeños errores que afectan de forma crítica el ciclo de vida del programa.

@@ -1,0 +1,18 @@
+export enum WF_INSTANCE_STATUS {
+    RUNNING = "RUNNING",
+    COMPLETED = "COMPLETED",
+    CANCELED = "CANCELED"
+}
+
+export enum WF_TASK_STATUS {
+    READY = "READY",
+    COMPLETED = "COMPLETED",
+    CANCELED = "CANCELED"
+}
+
+export enum HANA_APPLICATION_STATUS {
+    APPROVEMENT_PENDING = 1, 
+    REJECTED = 2, 
+    CANCELED = 3, 
+    FINISHED = 4 
+}

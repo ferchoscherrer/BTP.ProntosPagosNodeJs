@@ -1,0 +1,27 @@
+{
+	"DESTINATION_310_ID": "",
+    "DESTINATION_WORKFLOW": "",
+    "WORKFLOW_DEFINITION_ID": "",
+    "VCAP_SERVICES": {
+		"connectivity": [
+			{
+				"label": "connectivity"
+			}
+		],
+		"xsuaa": [
+			{
+				"label": "xsuaa"
+			}
+		],
+		"destination": [
+			{
+				"label": "destination"
+			}
+		],
+		"application-logs": [
+			{
+				"label": "application-logs"
+			}
+		]
+	}
+}

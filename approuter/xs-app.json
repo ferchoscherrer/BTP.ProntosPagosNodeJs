@@ -1,0 +1,20 @@
+{
+    "welcomeFile": "index.html",
+    "routes":[
+        {
+            "source": "/user-api/currentUser$",
+            "target": "/currentUser",
+            "service": "sap-approuter-userapi"
+        },
+        {
+            "source": "^/doc",
+            "target": "/doc/",
+            "destination": "prontosPagosService"
+        },
+        {
+            "source": "/index.html",
+            "target": "/index.html",
+            "localDir": "webapp"
+        }
+    ]
+}

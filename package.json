@@ -1,0 +1,15 @@
+{
+  "name": "cotemar-prontospagos",
+  "version": "0.0.1",
+  "description": "Cotemar | Prontos Pagos ",
+  "scripts": {
+    "build": "mbt build",
+    "deploy": "cf deploy mta_archives/cotemar-prontospagos-service_0.0.1.mtar",
+    "undeploy": "cf undeploy cotemar-prontospagos-service --delete-services --delete-service-keys --delete-service-brokers"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}
