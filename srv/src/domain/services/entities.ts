@@ -95,6 +95,15 @@ class EntitiesService {
         console.log(">>> EntitiesService - setStateApplicationRelation " + HANA_APPLICATION_STATUS);
         await this.entitiesRepository.changeStateApplication(applicationId, suffixId, stateId)
     }
+
+  //FMS inicio
+
+public async getApplications(): Promise<any> {
+    console.log(">>> EntitiesService - getApplications");
+    const res = await this.entitiesRepository.getApplications();
+    return res;
+}
+//FMS fin
 }
 
 export default EntitiesService

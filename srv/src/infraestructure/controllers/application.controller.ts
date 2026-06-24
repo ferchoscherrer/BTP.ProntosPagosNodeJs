@@ -16,6 +16,11 @@ import { IRejectParams } from "../../types/interfaces/IRejectParams";
 import GetApproversUseCase from "../../application/useCases/getApprovers";
 import UseCaseError from "../../application/Errors/UseCaseError";
 
+// FMS inicio
+import { Request} from "express";
+import EntitiesService from "../../domain/services/entities";
+//FMS fin
+
 class ApplicationController {
 
     private readonly createApplicationUseCase: CreateApplicationUseCase
@@ -27,7 +32,9 @@ class ApplicationController {
     private readonly getApplicationsByUser: GetUserApplicationsUseCase
     private readonly getApplicationsToApproveUseCase: GetApplicationsToApproveUseCase
     private readonly rejectApplicationUseCase: RejectApplicationUseCase
-
+    //FMS inicio
+    private readonly entitiesService: EntitiesService;
+    //FMS fin
     constructor() {
         this.createApplicationUseCase = new CreateApplicationUseCase()
         this.getApproversUseCase = new GetApproversUseCase()
@@ -38,6 +45,9 @@ class ApplicationController {
         this.getApplicationsByUser = new GetUserApplicationsUseCase()
         this.getApplicationsToApproveUseCase = new GetApplicationsToApproveUseCase()
         this.rejectApplicationUseCase = new RejectApplicationUseCase()
+        //FMS inicio
+        this.entitiesService = new EntitiesService();
+        //FMS fin
     }
 
     public async createApplication(req: IAuthRequest, res: Response): Promise<void> {
@@ -203,6 +213,31 @@ class ApplicationController {
             }
         }
     }
+
+
+    // FMS inicio
+    //metodo para obtener todas las solicitudes de todos los usuarios, solo para el admin
+// En tu srv/src/infraestructure/controllers/application.controller.ts
+
+public getAllApplicationsForAdmin = async (req: Request, res: Response) => {
+    // 1. Esto confirma si la petición entró al servidor Node.js
+    console.log(">>> [DEBUG] Entró a getAllApplicationsForAdmin");
+    
+    try {
+        console.log(">>> [DEBUG] Intentando llamar a entitiesService.getApplications()");
+        const applications = await this.entitiesService.getApplications(); 
+        
+        // 2. Esto confirma si el servicio respondió algo
+        console.log(">>> [DEBUG] Datos recibidos del servicio. Cantidad: ", applications ? applications.length : "NULO");
+        
+        res.status(200).json(applications);
+    } catch (error) {
+        // 3. Esto es vital: si falla, veremos el error real en los logs
+        console.error(">>> [ERROR] Fallo en el proceso:", error);
+        res.status(500).json({ error: "Error interno" });
+    }
+};
+
 }
 
 export default ApplicationController

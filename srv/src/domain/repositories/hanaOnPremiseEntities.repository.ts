@@ -73,17 +73,34 @@ class HanaEntitiesRepository implements IEntitiesRepository {
         }
     }
 
+    // public async getApplications(): Promise<any> {
+    //     console.log(">>> HanaEntitiesRepository - getApplications");
+    //     try {
+    //         const res = await this.axios.get(`${this.applicationPathPrefix}/solicitud`)
+    //         console.log("Response: ", res.data?.d?.results?.length);
+    //         return res.data?.d?.results
+    //     }
+    //     catch (err) {
+    //         throw err
+    //     }
+    // }
+
     public async getApplications(): Promise<any> {
-        console.log(">>> HanaEntitiesRepository - getApplications");
-        try {
-            const res = await this.axios.get(`${this.applicationPathPrefix}/solicitud`)
-            console.log("Response: ", res.data?.d?.results?.length);
-            return res.data?.d?.results
-        }
-        catch (err) {
-            throw err
-        }
+    console.log(">>> [DEBUG] Ejecutando getApplications en repositorio");
+    try {
+        const res = await this.axios.get(`${this.applicationPathPrefix}/solicitud`);
+        
+        // 4. Ver qué trae realmente la respuesta de HANA
+        console.log(">>> [DEBUG] Respuesta de HANA status:", res.status);
+        console.log(">>> [DEBUG] Cantidad de registros:", res.data?.d?.results?.length);
+        
+        return res.data?.d?.results;
     }
+    catch (err) {
+        console.error(">>> [ERROR] Error en Axios/HANA:", err.message);
+        throw err;
+    }
+}
 
     public async createApplication(body: IApplicationEntity): Promise<any> {
         console.log(">>> HanaEntitiesRepository - createApplication");

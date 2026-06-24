@@ -7,6 +7,11 @@
             "service": "sap-approuter-userapi"
         },
         {
+            "source": "^/api/applications/(.*)$",
+            "target": "/$1",
+            "destination": "srvProntosPagosNode"
+        },
+        {
             "source": "^/doc",
             "target": "/doc/",
             "destination": "prontosPagosService"
