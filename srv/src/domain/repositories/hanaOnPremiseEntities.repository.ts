@@ -334,6 +334,48 @@ class HanaEntitiesRepository implements IEntitiesRepository {
             throw err
         }
     }
+
+    //FMS inicio. se  moficia esta funicon para dejarla mas dinamica
+    // public async checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<boolean> {
+    //     console.log(">>> HanaEntitiesRepository - checkExistingApplication");
+    //     try {
+    //         // Hacemos la consulta a HANA filtrando por las 4 llaves principales de la partida
+    //         const res = await this.axios.get(`${this.applicationPathPrefix}/solicitud`, {
+    //             $filter: `DOCUMENT eq '${document}' and SOCIETY eq '${society}' and ANIO_CONTABLE eq '${aniocontable}' and APUNTE_CONTABLE eq '${apuntecontable}'`
+    //         });
+            
+    //         const results = res.data?.d?.results || [];
+    //         console.log(`Búsqueda de duplicados encontró: ${results.length} registros`);
+
+    //         if (results.length === 0) {
+    //             return false; // No existe, se puede crear
+    //         }
+
+    //         // Si existe, verificamos que no esté "Rechazada" (estado 2) o "Cancelada"
+    //         // (Si el estado 2 es Rechazada, cualquier otra activa bloqueará la creación)
+    //         const isDuplicate = results.some((req: any) => req.ID_ESTADO !== 2); 
+            
+    //         return isDuplicate;
+
+    //     } catch (err) {
+    //         console.error("Error verificando duplicados en HANA", err);
+    //         throw err;
+    //     }
+    // }
+    public async checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<any[]> {
+    try {
+        const res = await this.axios.get(`${this.applicationPathPrefix}/solicitud`, {
+            $filter: `DOCUMENT eq '${document}' and SOCIETY eq '${society}' and ANIO_CONTABLE eq '${aniocontable}' and APUNTE_CONTABLE eq '${apuntecontable}'`
+        });
+        
+        const results = res.data?.d?.results || [];
+        // Filtramos solo las que están en proceso (ID_ESTADO !== 2 es "Rechazado")
+        return results.filter((req: any) => req.ID_ESTADO !== 2); 
+    } catch (err) {
+        throw err;
+    }
+}
+    //FMS fin
 }
 
 export default HanaEntitiesRepository

@@ -14,4 +14,8 @@ export default interface IEntitiesRepository {
     getApplicationData(workflowId: string): Promise<any>
     getNextId(): Promise<number>
     getNextSuffixId(requestId: number): Promise<number>
+    //FMS inicio
+    //checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<boolean>;
+    checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<any[]>;
+    //FMS fin
 }

@@ -19,6 +19,37 @@ class CreateApplicationUseCase {
     public async createApplication(payload: IApplicationToCreate, user: string, username: string): Promise<IApplication> {
         console.log(">>> CreateApplicationUseCase");
 
+        //FMS inicio 
+    //     const isDuplicate = await this.entitiesService.checkExistingApplication(
+    //     payload.document, 
+    //     payload.society, 
+    //     payload.aniocontable, 
+    //     payload.apuntecontable
+    // );
+    // if (isDuplicate) {
+    //     throw new UseCaseError("Ya existe una solicitud de pronto pago en proceso para este documento.");
+    // }
+
+    const activeRequests = await this.entitiesService.checkExistingApplication(
+    payload.document, 
+    payload.society, 
+    payload.aniocontable, 
+    payload.apuntecontable
+);
+
+// Evaluamos si el array tiene elementos
+if (activeRequests && activeRequests.length > 0) {
+    const ids = activeRequests
+        .map(req => {
+            const fechaLegible = this.formatDate(req.FECHA);
+            const estadoDesc = this.getStatusDescription(Number(req.ID_ESTADO));
+            return `• ID: ${req.ID_SOLICITUD} (v${req.SOLICITUD_VERSION}) | Estado: ${estadoDesc} | Fecha: ${fechaLegible} | Ref: ${req.REFERENCIA}`;
+    }).join("\n");
+        
+    throw new UseCaseError(`Ya existen solicitudes en proceso para este documento:\n${ids}\n\nPor favor, revisa estas solicitudes antes de crear una nueva.`);
+}
+//FMS fin
+
         // TODO
         //this.validateMoneyRanges(Number(payload.money))
         payload.money = this.formatNumberWithTwoDecimals(payload.money)
@@ -32,6 +63,7 @@ class CreateApplicationUseCase {
 
 
         // /suffix
+
         if (userAreaDesc === null || userAreaDesc === "" || userAreaDesc === undefined) {
             throw new UseCaseError("El usuario no tiene un area asociada.");
         }
@@ -142,6 +174,8 @@ class CreateApplicationUseCase {
             wf: appInstance
         }
     }
+
+
     private formatNumberWithTwoDecimals(input: string): string {
         const number = parseFloat(input);
         const formattedNumber = number.toFixed(2);
@@ -175,6 +209,37 @@ class CreateApplicationUseCase {
             throw new UseCaseError('El rango debe ser menor a 100000000')
         }
     }
+
+
+    //FMS se crean funciones en el backend para formatear la fecha de HANA a un formato legible dd/mm/yyyy //Inicio
+    private formatDate(sapDate: any): string {
+    if (!sapDate) return "N/A";
+    
+    // Si viene en formato "/Date(123456789)/"
+    if (typeof sapDate === 'string' && sapDate.includes('/Date')) {
+        const timestamp = parseInt(sapDate.replace(/\/Date\((-?\d+)\)\//, '$1'));
+        const date = new Date(timestamp);
+        return date.toLocaleDateString('es-MX'); // Formato dd/mm/yyyy
+    }
+    
+    // Si ya viene como Date o String ISO, intenta formatearlo
+    return new Date(sapDate).toLocaleDateString('es-MX');
+}
+    private getStatusDescription(statusId: number): string {
+    switch (statusId) {
+        case HANA_APPLICATION_STATUS.APPROVEMENT_PENDING:
+            return "Pendiente";
+        case HANA_APPLICATION_STATUS.REJECTED:
+            return "Rechazada";
+        case HANA_APPLICATION_STATUS.CANCELED:
+            return "Cancelada";
+        case HANA_APPLICATION_STATUS.FINISHED:
+            return "Pronto pago";
+        default:
+            return "Estado desconocido";
+    }
+}
+//FM FIN  considerar que estos case ya existene en el front, pero es dificil llamar funciones q aplican solo para front. 
 }
 
 export default CreateApplicationUseCase

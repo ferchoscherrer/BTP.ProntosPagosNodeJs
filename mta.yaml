@@ -17,7 +17,8 @@ modules:
       buildpacks: [https://github.com/cloudfoundry/nodejs-buildpack]
       keep-existing-routes: true
       routes:
-        - route: prontospagosserviceprod.cfapps.us10.hana.ondemand.com
+        #- route: prontospagosserviceprod.cfapps.us10.hana.ondemand.com
+        - route: https://prontospagosservice.cfapps.us10.hana.ondemand.com
     provides:
       - name: srv_api
         properties:

@@ -30,6 +30,6 @@
         "role-template-references": [
           "$XSAPPNAME.Viewer"
         ]
-      }
+      } 
     ]
 }

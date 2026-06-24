@@ -18,6 +18,17 @@ class EntitiesService {
         return res
     }
 
+    //FMS inicio
+    // public async checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<boolean> {
+    //     console.log(">>> EntitiesService - checkExistingApplication");
+    //     const isDuplicate = await this.entitiesRepository.checkExistingApplication(document, society, aniocontable, apuntecontable);
+    //     return isDuplicate;
+    // }
+    public async checkExistingApplication(document: string, society: string, aniocontable: string, apuntecontable: string): Promise<any[]> {
+    return await this.entitiesRepository.checkExistingApplication(document, society, aniocontable, apuntecontable);
+}
+    //FMS fin
+
     public async getRequestStatusId(requestId: number, suffix: number): Promise<any> {
         console.log(">>> EntitiesService - getRequestStatusId");
         const res = await this.entitiesRepository.getRequestStatusId(requestId, suffix)
